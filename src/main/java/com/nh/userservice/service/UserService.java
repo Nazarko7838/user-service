@@ -1,7 +1,10 @@
 package com.nh.userservice.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.nh.userservice.dto.ClientRequestDto;
+import com.nh.userservice.dto.ClientResponseDto;
 import org.springframework.stereotype.Service;
 
 import com.nh.userservice.model.Client;
@@ -20,17 +23,30 @@ public class UserService {
         this.clientRepository = clientRepository;
     }
 
-    public Client createClient(Client client) {
-        return clientRepository.save(client);
+    public ClientResponseDto createClient(ClientRequestDto clientDto) {
+        Client client = new Client();
+        client.setFullName(clientDto.fullName());
+        client.setLicensePlate(clientDto.licensePlate());
+        Client saved = clientRepository.save(client);
+        return mapClientToDto(saved);
     }
 
-    public List<Client> getAllClients() {
-        return clientRepository.findAll();
+    public List<ClientResponseDto> getAllClients() {
+        return clientRepository.findAll()
+                .stream()
+                .map(this::mapClientToDto)
+                .collect(Collectors.toList());
     }
 
-    public Client getClientById(Long id) {
-        return clientRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Client not found with id: " + id));
+    public ClientResponseDto getClientById(Long id) {
+        Client client = clientRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Клієнта з ID " + id + " не знайдено"));
+        return mapClientToDto(client);
+    }
+
+    private ClientResponseDto mapClientToDto(Client client) {
+        if (client == null) return null;
+        return new ClientResponseDto(client.getId(), client.getFullName(), client.getLicensePlate());
     }
 
 }

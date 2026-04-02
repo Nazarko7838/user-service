@@ -2,6 +2,8 @@ package com.nh.userservice.controller;
 
 import java.util.List;
 
+import com.nh.userservice.dto.ClientRequestDto;
+import com.nh.userservice.dto.ClientResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nh.userservice.model.Client;
 import com.nh.userservice.service.UserService;
 
 import jakarta.validation.Valid;
@@ -33,17 +34,17 @@ public class ClientController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Client createClient(@Valid @RequestBody Client client) {
+    public ClientResponseDto createClient(@Valid @RequestBody ClientRequestDto client) {
         return userService.createClient(client);
     }
 
     @GetMapping
-    public List<Client> getAllClients() {
+    public List<ClientResponseDto> getAllClients() {
         return userService.getAllClients();
     }
 
     @GetMapping("/{id}")
-    public Client getClientById(@PathVariable Long id) {
+    public ClientResponseDto getClientById(@PathVariable Long id) {
         return userService.getClientById(id);
     }
 
