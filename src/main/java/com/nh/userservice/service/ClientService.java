@@ -15,11 +15,11 @@ import com.nh.userservice.exception.ResourceNotFoundException;
  * Handles client business logic
  */
 @Service
-public class UserService {
+public class ClientService {
 
     private final ClientRepository clientRepository;
 
-    public UserService(ClientRepository clientRepository) {
+    public ClientService(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
     }
 
