@@ -28,13 +28,12 @@ public class RedisCacheConfig {
                 .build();
 
         // 2. Jackson 3 Builder Pattern:
-        // Use rebuild() to get a MapperBuilder, apply the typing rules, and build() the new immutable mapper.
         ObjectMapper cacheMapper = springBootMapper.rebuild()
-                .activateDefaultTyping(ptv, DefaultTyping.NON_FINAL)
+                .activateDefaultTypingAsProperty(ptv, DefaultTyping.NON_FINAL_AND_RECORDS, "@class")
                 .build();
 
         return RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofMinutes(10))
+                .entryTtl(Duration.ofMinutes(1))    // for demonstration
                 .disableCachingNullValues()
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJacksonJsonRedisSerializer(cacheMapper)));
